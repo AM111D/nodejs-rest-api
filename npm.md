@@ -2,7 +2,7 @@ npm i nodemon
 
 npm i mongoose
 
-npm i dotenvnpmm
+npm i dotenv
 
 npm install mongodb
 
