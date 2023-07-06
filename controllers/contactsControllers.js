@@ -4,7 +4,11 @@ const Contact = require("../models/contacts");
 
 const getContacts = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const { _id: owner } = req.user;
+    const result = await Contact.find(
+      { owner },
+      "-createdAt -updatedAt"
+    ).populate("owner");
     res.json(result);
   } catch (error) {
     next(error);
@@ -32,7 +36,15 @@ const createContact = async (req, res, next) => {
     }
 
     const { _id: owner } = req.user;
-    const result = await Contact.create(...req.body, owner);
+    const currentUser = await User.findById(owner);
+    if (!currentUser) {
+      throw httpError(404, "User not found");
+    }
+
+    const result = await Contact.create({
+      ...req.body,
+      owner: currentUser.name,
+    });
     return res.status(201).json(result);
   } catch (error) {
     next(error);
