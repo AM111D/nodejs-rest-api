@@ -9,6 +9,10 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
     password: {
       type: String,
       minLength: 6,
@@ -32,7 +36,6 @@ const userSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
-      required: true,
     },
   },
   { versionKey: false, timestamps: true }

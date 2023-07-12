@@ -10,5 +10,4 @@ const updateSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-// module.exports = { addSchema, updateSchema };
 module.exports = { addSchema, updateSchema };
