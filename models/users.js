@@ -33,6 +33,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      require: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
