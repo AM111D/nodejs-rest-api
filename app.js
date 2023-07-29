@@ -41,4 +41,27 @@ mongoose
 
 // ------------------------------------------------------------------------
 
+// const nodemailerConfig = {
+//   host: "smtp.meta.ua",
+//   port: 465,
+//   auth: {
+//     user: "dimasssnike@meta.ua",
+//     pass: META_PASSWORD,
+//   },
+// };
+
+// const transport = nodemailer.createTransport(nodemailerConfig);
+
+// const email = {
+//   to: "ninek17677@quipas.com",
+//   from: "dimasssnike@meta.ua",
+//   subject: "Test email",
+//   html: "<p><strong>Test email</strong> from localhost:3001</p>",
+// };
+
+// transport
+//   .sendMail(email)
+//   .then(() => console.log("Email send success"))
+//   .catch((error) => console.log(error.message));
+
 module.exports = app;

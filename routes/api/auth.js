@@ -8,6 +8,8 @@ const upload = require("../../middlewares/upload");
 
 const { schemas } = require("../../models/users");
 
+const verifyToken = require("../../controllers/verifyToken");
+
 const router = express.Router();
 
 // singup
@@ -26,5 +28,7 @@ router.patch(
   upload.single("avatar"),
   ctrl.updateAvatar
 );
+
+router.get("/verify/:verificationToken", ctrl.verifyToken);
 
 module.exports = router;

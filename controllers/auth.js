@@ -4,11 +4,12 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs");
 const { promisify } = require("util");
+const { nanoid } = require("nanoid");
 
 const { User } = require("../models/users");
-const { httpError } = require("../helpers");
+const { httpError, sendEmail } = require("../helpers");
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -22,13 +23,26 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-
     const avatarURL = gravatar.url(email);
+    const verificationToken = nanoid();
 
     const newUser = await User.create({
       ...req.body,
       password: hashPassword,
       avatarURL,
+      verificationToken,
+    });
+
+    // const verifyEmail = {
+    //   to: email,
+    //   subject: "Please, confir, your email address",
+    //   // html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}">Confirm your email</a>`,
+    //   html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+    // };
+    await sendEmail({
+      to: email,
+      subject: "Please, confirm your email",
+      html: `<a href="http://localhost:3001/api/users/verify/${verificationToken}">Confirm your email</a>`,
     });
 
     res.status(201).json({
