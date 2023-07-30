@@ -4,7 +4,7 @@ const { EMAIL_USER, EMAIL_PASS } = process.env;
 
 async function sendEmail({ to, subject, html }) {
   const email = {
-    from: "info@bookingclub.com",
+    from: "Dima@ukr.net",
     to,
     subject,
     html,

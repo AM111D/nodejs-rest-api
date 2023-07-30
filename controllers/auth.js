@@ -33,16 +33,10 @@ const register = async (req, res, next) => {
       verificationToken,
     });
 
-    // const verifyEmail = {
-    //   to: email,
-    //   subject: "Please, confir, your email address",
-    //   // html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}">Confirm your email</a>`,
-    //   html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
-    // };
     await sendEmail({
       to: email,
       subject: "Please, confirm your email",
-      html: `<a href="http://localhost:3001/api/users/verify/${verificationToken}">Confirm your email</a>`,
+      html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}">Confirm your email</a>`,
     });
 
     res.status(201).json({
@@ -111,10 +105,40 @@ const updateAvatar = async (req, res) => {
   });
 };
 
+const verify = async (req, res, next) => {
+  try {
+    const { email } = req.user;
+
+    if (!email) {
+      return res.status(400).json({ message: "missing required field email" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.verify) {
+      return res.status(400).json({ message: "User is already verified" });
+    }
+
+    user.verify = true;
+    await user.save();
+
+    await sendVerificationEmail(user.email);
+
+    res.json({ message: "Verification email has been sent" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getCurrent,
   logout,
   updateAvatar,
+  verify,
 };

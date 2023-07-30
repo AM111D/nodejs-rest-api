@@ -1,10 +1,10 @@
 const { httpError } = require("../helpers");
-const User = require("../models/users");
+const { User } = require("../models/users");
 
 const verifyToken = async (req, res) => {
-  const { token } = req.params;
-
-  const user = await User.findOne({ verifyToken: token });
+  const { verificationToken } = req.params;
+  // console.log(verificationToken);
+  const user = await User.findOne({ verificationToken });
 
   if (!user) {
     throw httpError(400, "Verify token is not valid");
@@ -14,9 +14,9 @@ const verifyToken = async (req, res) => {
     throw httpError(400, "User has already verificated");
   }
 
-  await User.findByIdUpdate(user._id, {
+  await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationToken: null,
+    // verificationToken: null,
   });
 
   return res.json({ message: "Success" });
